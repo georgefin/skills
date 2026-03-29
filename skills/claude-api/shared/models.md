@@ -1,10 +1,10 @@
 # Claude Model Catalog
 
-**Only use exact model IDs listed in this file.** Never guess or construct model IDs — incorrect IDs will cause API errors. Use aliases wherever available. For the latest information, WebFetch the Models Overview URL in `shared/live-sources.md`, or query the Models API directly (see Programmatic Model Discovery below).
+**Only use exact model IDs listed in this file.** Never guess or construct model IDs â incorrect IDs will cause API errors. Use aliases wherever available. For the latest information, WebFetch the Models Overview URL in `shared/live-sources.md`, or query the Models API directly (see Programmatic Model Discovery below).
 
 ## Programmatic Model Discovery
 
-For **live** capability data — context window, max output tokens, feature support (thinking, vision, effort, structured outputs, etc.) — query the Models API instead of relying on the cached tables below. Use this when the user asks "what's the context window for X", "does model X support vision/thinking/effort", "which models support feature Y", or wants to select a model by capability at runtime.
+For **live** capability data â context window, max output tokens, feature support (thinking, vision, effort, structured outputs, etc.) â query the Models API instead of relying on the cached tables below. Use this when the user asks "what's the context window for X", "does model X support vision/thinking/effort", "which models support feature Y", or wants to select a model by capability at runtime.
 
 ```python
 m = client.models.retrieve("claude-opus-4-6")
@@ -13,7 +13,7 @@ m.display_name       # "Claude Opus 4.6"
 m.max_input_tokens   # context window (int)
 m.max_tokens         # max output tokens (int)
 
-# capabilities is an untyped nested dict — bracket access, check ["supported"] at the leaf
+# capabilities is an untyped nested dict â bracket access, check ["supported"] at the leaf
 caps = m.capabilities
 caps["image_input"]["supported"]                       # vision
 caps["thinking"]["types"]["adaptive"]["supported"]     # adaptive thinking
@@ -21,13 +21,13 @@ caps["effort"]["max"]["supported"]                     # effort: max (also low/m
 caps["structured_outputs"]["supported"]
 caps["context_management"]["compact_20260112"]["supported"]
 
-# filter across all models — iterate the page object directly (auto-paginates); do NOT use .data
+# filter across all models â iterate the page object directly (auto-paginates); do NOT use .data
 [m for m in client.models.list()
  if m.capabilities["thinking"]["types"]["adaptive"]["supported"]
  and m.max_input_tokens >= 200_000]
 ```
 
-Top-level fields (`id`, `display_name`, `max_input_tokens`, `max_tokens`) are typed attributes. `capabilities` is a dict — use bracket access, not attribute access. The API returns the full capability tree for every model with `supported: true/false` at each leaf, so bracket chains are safe without `.get()` guards. TypeScript SDK: same method names, also auto-paginates on iteration.
+Top-level fields (`id`, `display_name`, `max_input_tokens`, `max_tokens`) are typed attributes. `capabilities` is a dict â use bracket access, not attribute access. The API returns the full capability tree for every model with `supported: true/false` at each leaf, so bracket chains are safe without `.get()` guards. TypeScript SDK: same method names, also auto-paginates on iteration.
 
 ### Raw HTTP
 
@@ -47,8 +47,8 @@ curl https://api.anthropic.com/v1/models/claude-opus-4-6 \
     "image_input": {"supported": true},
     "structured_outputs": {"supported": true},
     "thinking": {"supported": true, "types": {"enabled": {"supported": true}, "adaptive": {"supported": true}}},
-    "effort": {"supported": true, "low": {"supported": true}, …, "max": {"supported": true}},
-    …
+    "effort": {"supported": true, "low": {"supported": true}, â¦, "max": {"supported": true}},
+    â¦
   }
 }
 ```
@@ -57,15 +57,15 @@ curl https://api.anthropic.com/v1/models/claude-opus-4-6 \
 
 | Friendly Name     | Alias (use this)    | Full ID                       | Context        | Max Output | Status |
 |-------------------|---------------------|-------------------------------|----------------|------------|--------|
-| Claude Opus 4.6   | `claude-opus-4-6`   | —                             | 200K (1M beta) | 128K       | Active |
+| Claude Opus 4.6   | `claude-opus-4-6`   | â                             | 200K (1M beta) | 128K       | Active |
 | Claude Sonnet 4.6 | `claude-sonnet-4-6` | -                             | 200K (1M beta) | 64K        | Active |
-| Claude Haiku 4.5  | `claude-haiku-4-5`  | `claude-haiku-4-5-20251001`   | 200K           | 64K        | Active |
+| Claude Haiku 4.5  | `claude-haiku-4-5`  | `claude-haiku-4-5`   | 200K           | 64K        | Active |
 
 ### Model Descriptions
 
-- **Claude Opus 4.6** — Our most intelligent model for building agents and coding. Supports adaptive thinking (recommended), 128K max output tokens (requires streaming for large outputs). 1M context window available in beta via `context-1m-2025-08-07` header.
-- **Claude Sonnet 4.6** — Our best combination of speed and intelligence. Supports adaptive thinking (recommended). 1M context window available in beta via `context-1m-2025-08-07` header. 64K max output tokens.
-- **Claude Haiku 4.5** — Fastest and most cost-effective model for simple tasks.
+- **Claude Opus 4.6** â Our most intelligent model for building agents and coding. Supports adaptive thinking (recommended), 128K max output tokens (requires streaming for large outputs). 1M context window available in beta via `context-1m-2025-08-07` header.
+- **Claude Sonnet 4.6** â Our best combination of speed and intelligence. Supports adaptive thinking (recommended). 1M context window available in beta via `context-1m-2025-08-07` header. 64K max output tokens.
+- **Claude Haiku 4.5** â Fastest and most cost-effective model for simple tasks.
 
 ## Legacy Models (still active)
 
@@ -81,7 +81,7 @@ curl https://api.anthropic.com/v1/models/claude-opus-4-6 \
 
 | Friendly Name     | Alias (use this)    | Full ID                       | Status     | Retires      |
 |-------------------|---------------------|-------------------------------|------------|--------------|
-| Claude Haiku 3    | —                   | `claude-3-haiku-20240307`     | Deprecated | Apr 19, 2026 |
+| Claude Haiku 3    | â                   | `claude-3-haiku-20240307`     | Deprecated | Apr 19, 2026 |
 
 ## Retired Models (no longer available)
 
@@ -111,9 +111,9 @@ When a user asks for a model by name, use this table to find the correct model I
 | "sonnet 4.6"                              | `claude-sonnet-4-6`            |
 | "sonnet 4.5"                              | `claude-sonnet-4-5`            |
 | "sonnet 4", "sonnet 4.0"                  | `claude-sonnet-4-0`            |
-| "sonnet 3.7"                              | Retired — suggest `claude-sonnet-4-5` |
-| "sonnet 3.5"                              | Retired — suggest `claude-sonnet-4-5` |
+| "sonnet 3.7"                              | Retired â suggest `claude-sonnet-4-5` |
+| "sonnet 3.5"                              | Retired â suggest `claude-sonnet-4-5` |
 | "haiku", "fast", "cheap"                  | `claude-haiku-4-5`             |
 | "haiku 4.5"                               | `claude-haiku-4-5`             |
-| "haiku 3.5"                               | Retired — suggest `claude-haiku-4-5` |
-| "haiku 3"                                 | Deprecated — suggest `claude-haiku-4-5` |
+| "haiku 3.5"                               | Retired â suggest `claude-haiku-4-5` |
+| "haiku 3"                                 | Deprecated â suggest `claude-haiku-4-5` |
